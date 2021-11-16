@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/admin/code/CyrilWarde/TaxiFareModel/mlruns/1/59b6ed07c29c488aad21da8ae91f630e/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 59b6ed07c29c488aad21da8ae91f630e
+run_uuid: 59b6ed07c29c488aad21da8ae91f630e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1637071357773
+status: 1
+tags: []
+user_id: unknown
