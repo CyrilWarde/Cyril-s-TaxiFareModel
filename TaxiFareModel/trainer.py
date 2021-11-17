@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 import mlflow
 from memoized_property import memoized_property
 from mlflow.tracking import MlflowClient
+import joblib
 
 
 
@@ -28,7 +29,7 @@ class Trainer():
         self.y = y
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
             X, y)
-        self.experiment_name = "[FR] [Paris] [CyrilWarde] Trainer.py v1"
+        self.experiment_name = "[FR] [Paris] [CyrilWarde] Trainer.py v2"
         self.mlfow_uri = "https://mlflow.lewagon.co/"
 
     def set_pipeline(self):
@@ -100,6 +101,11 @@ class Trainer():
     def mlflow_log_metric(self, key, value):
         self.mlflow_client.log_metric(self.mlflow_run.info.run_id, key, value)
 
+    def save_model(self):
+        """ Save the trained model into a model.joblib file """
+        model = self.run()
+        joblib.dump(model, 'model.joblib')
+
 
 if __name__ == "__main__":
     df = get_data()
@@ -109,3 +115,4 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     trainer = Trainer(X, y)
     print(trainer.evaluate(X_test, y_test))
+    trainer.save_model()
