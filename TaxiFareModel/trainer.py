@@ -2,7 +2,6 @@
 from re import T
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn import set_config; set_config(display='diagram')
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
@@ -14,6 +13,7 @@ import mlflow
 from memoized_property import memoized_property
 from mlflow.tracking import MlflowClient
 import joblib
+from google.cloud import storage
 
 
 
@@ -101,10 +101,30 @@ class Trainer():
     def mlflow_log_metric(self, key, value):
         self.mlflow_client.log_metric(self.mlflow_run.info.run_id, key, value)
 
+
+    def upload_model_to_gcp(self):
+
+        STORAGE_LOCATION = 'models/taxifarepipeline/model.joblib'
+        BUCKET_NAME = 'wagon-data-722-warde'
+
+        client = storage.Client()
+
+        bucket = client.bucket(BUCKET_NAME)
+
+        blob = bucket.blob(STORAGE_LOCATION)
+
+        blob.upload_from_filename('model.joblib')
+
     def save_model(self):
+        STORAGE_LOCATION = 'models/taxifarepipeline/model.joblib'
         """ Save the trained model into a model.joblib file """
         model = self.run()
         joblib.dump(model, 'model.joblib')
+        print("saved model.joblib locally")
+
+        # Implement here
+        self.upload_model_to_gcp()
+        print(f"uploaded model.joblib to gcp cloud storage under \n => {STORAGE_LOCATION}")
 
 
 if __name__ == "__main__":
