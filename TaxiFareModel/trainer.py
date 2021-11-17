@@ -5,8 +5,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
-from TaxiFareModel.encoders import DistanceTransformer, TimeFeaturesEncoder
-from TaxiFareModel.data import get_data, clean_data
+from TaxiFareModel.encoders import DistanceTransformer, TimeFeaturesEncoder, OptimizeSize
+from TaxiFareModel.data import get_data, clean_data, df_optimized
 from TaxiFareModel.utils import compute_rmse
 from sklearn.model_selection import train_test_split
 import mlflow
@@ -14,6 +14,7 @@ from memoized_property import memoized_property
 from mlflow.tracking import MlflowClient
 import joblib
 from google.cloud import storage
+import pandas as pd
 
 
 
@@ -53,9 +54,13 @@ class Trainer():
             ('time', time_pipe, ['pickup_datetime'])
         ], remainder="drop")
 
+        #optimizing size after preprocessing
+        optimized_preproc_pipe = Pipeline([('opti_size', OptimizeSize())])
+
         # Add the model of your choice to the pipeline
         self.pipeline = Pipeline([
             ('preproc', preproc_pipe),
+            ('opti_size', optimized_preproc_pipe),
             ('linear_model', estimator)
         ])
 
@@ -129,6 +134,7 @@ class Trainer():
 
 if __name__ == "__main__":
     df = get_data()
+    df = df_optimized(df)
     df = clean_data(df)
     X = df.drop(columns='fare_amount')
     y = df['fare_amount']
