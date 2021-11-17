@@ -32,6 +32,7 @@ class Trainer():
             X, y)
         self.experiment_name = "[FR] [Paris] [CyrilWarde] Trainer.py v2"
         self.mlfow_uri = "https://mlflow.lewagon.co/"
+        
 
     def set_pipeline(self):
         """defines the pipeline as a class attribute"""

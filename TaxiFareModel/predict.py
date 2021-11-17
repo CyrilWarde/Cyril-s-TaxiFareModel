@@ -61,4 +61,4 @@ if __name__ == '__main__':
 
     # ⚠️ in order to push a submission to kaggle you need to use the WHOLE dataset
     nrows = 100
-    generate_submission_csv(nrows, kaggle_upload=True)
+    generate_submission_csv(nrows, kaggle_upload=False)

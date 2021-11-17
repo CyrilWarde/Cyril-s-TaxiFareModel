@@ -103,4 +103,6 @@ gcp_submit_training:
 		--python-version=${PYTHON_VERSION} \
 		--runtime-version=${RUNTIME_VERSION} \
 		--region ${REGION} \
-		--stream-logs
+		--stream-logs \
+		--scale-tier CUSTOM \
+    --master-machine-type n1-standard-16
